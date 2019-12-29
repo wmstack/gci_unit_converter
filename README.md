@@ -13,12 +13,16 @@ cd gci_unit_converter
 #run!
 python3 converter.py
 Enter your conversion:
+ython3 converter.py 
+Enter your conversion:
 > horse to meters per second
-horse = 0.423333 meters per second
-> turtle to meters per second
-turtle = 0.000423 meters per second
-> horse to turtle
-horse = 1000.0 turtle
+horse = 24.444444 meters per second
+> watts to joules per hour
+watts = 3600.0 joules per hour
+> 20 kelvin to rankine   
+20 kelvin = 36.0 rankine
+> yards to kilometers
+yards = 0.000914 kilometers
 > kelvin to rankine
 kelvin = 1.8 rankine
 
