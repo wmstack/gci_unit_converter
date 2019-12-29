@@ -276,10 +276,16 @@ class parse():
             if necessary:
                 return False
     def eat_expression(self):
+        self.whitespace()
+        leftpos = self.pos
         left = self.eat_muliply_divide(1)
+        left_expr = self.expr[leftpos:self.pos].rstrip()
         self.eat_known_word(['as','to'])
+        self.whitespace()
+        leftpos = self.pos
         right = self.eat_muliply_divide(1)
-        self.result = (left, right)
+        right_expr = self.expr[leftpos:self.pos].rstrip()
+        self.result = (left, right, left_expr, right_expr)
 
 #unit group stores dictionaries
 #if two names are in the same unit group, they are linear
@@ -472,7 +478,7 @@ def remove_redundant_equations():
         equations.pop(index_to_remove - indices_removed)
         indices_removed+=1
 
-def equation_handle(equations,src, target):
+def equation_handle(equations,src, target, left_expr, right_expr):
     variables  = set()
     src['$'] = -1
     target['$$'] = -1
@@ -511,7 +517,7 @@ def equation_handle(equations,src, target):
                     conversion_factor = 1/conversion_factor
                 
                 conversion_factor = round(conversion_factor*10e5) /10e5
-                print(conversion_factor)
+                print('{} = {} {}'.format(left_expr, conversion_factor, right_expr))
                 break
             else:
                 print(equ)
@@ -528,7 +534,7 @@ remove_redundant_equations()
 
 print('Enter your conversion:')
 while True:
-    left, right = parse(input('> '),'conversion').result
+    left, right, left_expr, right_expr = parse(input('> '),'conversion').result
     left = eq2group(array2eq(left))
     right = eq2group(array2eq(right))
-    equation_handle(equations, left, right)
+    equation_handle(equations, left, right,left_expr, right_expr)
