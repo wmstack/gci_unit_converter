@@ -1,5 +1,6 @@
 
 #names on the left separated by commas, and their composition on the right
+#concatenation is multiplication
 
 #time
 sec, secs, second, seconds = s
@@ -12,21 +13,32 @@ y, yr, year, years = 365 days
 ft, feet, foot = 12 inches
 inch, inches = 2.54 centimeter
 
-#definition after usage, tolerated
-cm, centimeter = 0.01 meter
+#meter not defined, tolerated
+cm, centimeter, centimeters = 0.01 meter
 
 #circular, still tolerated
-meter, meters = 100 centimeter
+m, meter, meters = 100 centimeter
 
 kilometer, km, kilometers = 10e3 meters
+mile, miles = 1.60934 kilometers
 
-mile, miles = 1.54 kilometers
+kilometer = 1093.61 yard
+yd, yards = yard
+
+#area
+#also squared keyword
+acre = 4046.86 meters squared
+
+#mass
+kilogram = 10e3 gram
+mg, milligram = 10e-3 gram
+
 
 mph = miles per hour
 turtle, turtles = inches per minute
-horse, horses = 1000 turtles
+horse, horses = 88 km per hour
 
-newton = meters/second kilogram
+newton = meters/second^2 kilogram
 
 joule = kilogram (meters/second)^2
 watt, watts = kilogram meters squared per second squared per second
@@ -38,10 +50,5 @@ r, rankine = (5/9) kelvin
 joules = kilogram (meters per second)^2
 kilogram = 10e3 grams
 gram, grams = 1000 milligram
-mg = milligram
-#every chain must start with a base unit conversion
-#centimeter is then calculated
-#and 'meter = 100 centimeter' is checked for contradiction
 
-centimeter = 0.01 m
 
