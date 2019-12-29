@@ -1,0 +1,47 @@
+
+#names on the left separated by commas, and their composition on the right
+
+#time
+sec, secs, second, seconds = s
+min, mins, minute, minutes = 60 seconds
+h, hr, hrs, hour, hours = 60 times min
+d, day, days = 24 hours
+y, yr, year, years = 365 days
+
+#distance
+ft, feet, foot = 12 inches
+inch, inches = 2.54 centimeter
+
+#definition after usage, tolerated
+cm, centimeter = 0.01 meter
+
+#circular, still tolerated
+meter, meters = 100 centimeter
+
+kilometer, km, kilometers = 10e3 meters
+
+mile, miles = 1.54 kilometers
+
+mph = miles per hour
+turtle, turtles = inches per minute
+horse, horses = 1000 turtles
+
+newton = meters/second kilogram
+
+joule = kilogram (meters/second)^2
+watt, watts = kilogram meters squared per second squared per second
+
+kilowatt = 100 watts
+kelvin = k
+r, rankine = (5/9) kelvin
+
+joules = kilogram (meters per second)^2
+kilogram = 10e3 grams
+gram, grams = 1000 milligram
+mg = milligram
+#every chain must start with a base unit conversion
+#centimeter is then calculated
+#and 'meter = 100 centimeter' is checked for contradiction
+
+centimeter = 0.01 m
+
