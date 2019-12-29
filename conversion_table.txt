@@ -19,7 +19,7 @@ cm, centimeter, centimeters = 0.01 meter
 #circular, still tolerated
 m, meter, meters = 100 centimeter
 
-kilometer, km, kilometers = 10e3 meters
+kilometer, km, kilometers = 1e3 meters
 mile, miles = 1.60934 kilometers
 
 kilometer = 1093.61 yard
@@ -30,8 +30,8 @@ yd, yards = yard
 acre = 4046.86 meters squared
 
 #mass
-kilogram = 10e3 gram
-mg, milligram = 10e-3 gram
+kilogram = 1e3 gram
+mg, milligram = 1e-3 gram
 
 
 mph = miles per hour
@@ -43,12 +43,12 @@ newton = meters/second^2 kilogram
 joule = kilogram (meters/second)^2
 watt, watts = kilogram meters squared per second squared per second
 
-kilowatt = 100 watts
+kilowatt = 1000 watts
 kelvin = k
 r, rankine = (5/9) kelvin
 
 joules = kilogram (meters per second)^2
-kilogram = 10e3 grams
+kilogram = 1e3 grams
 gram, grams = 1000 milligram
 
 

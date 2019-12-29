@@ -280,7 +280,7 @@ class parse():
         leftpos = self.pos
         left = self.eat_muliply_divide(1)
         left_expr = self.expr[leftpos:self.pos].rstrip()
-        self.eat_known_word(['as','to'])
+        self.eat_known_word(['as','to'], 1)
         self.whitespace()
         leftpos = self.pos
         right = self.eat_muliply_divide(1)
@@ -300,18 +300,6 @@ def close_enough(num1, num2):
     if abs( (num1-num2)/(abs(num1) +1) ) < 0.01:
         return True
     return False
-
-def reduce_groups():
-    #unfinished
-    #combine groups which have a common member, because linearity is transitive
-    new_unit_groups = []
-    for i, group in enumerate(unit_groups):
-        groups_with_name = [group_other for group_other in unit_groups[i+1:] if any(name in group_other for name in group)  ]
-        for group_other in groups_with_name:
-            #these groups have a common element with the group, so they should be merged
-            for key, value in group_other.items():
-                if key in group:
-                    return
 
 def groups_with(names):
     return (group for group in unit_groups if any(name in group for name in names))
@@ -342,11 +330,11 @@ def add_group(names):
         unit_groups.append(unit_group)
         return unit_group
             
-def add_variable_power(eq, _id_, value):
-    eq.setdefault(_id_,0)
-    eq[_id_]+=value
-    if eq[_id_] == 0:
-        del eq[_id_]
+def add_variable_power(eq, ug, value):
+    eq.setdefault(ug,0)
+    eq[ug]+=value
+    if eq[ug] == 0:
+        del eq[ug]
 equations = []
 
 def raise_group(group, power):
@@ -428,10 +416,11 @@ def merge_groups(group_1,group_2,ratio,eqs=equations):
         if key == '_id_':
             continue
         if key in group_1.keys():
-            if not close_enough(value*ratio, group_1[key]):
+            if not close_enough(group_1[key]/value, ratio):
+                print(group_1,group_2,key, value, ratio)
                 print('contradiction')
         else:
-            group_1[key] = value * ratio
+            group_1[key] = value*ratio
     #replace references equations
     for equation in eqs:
         if group_2['_id_'] in equation:
@@ -439,6 +428,15 @@ def merge_groups(group_1,group_2,ratio,eqs=equations):
             equation['_']*=  ratio**equation[group_2['_id_']]
             equation.pop(group_2['_id_'])
     unit_groups.remove(group_2)
+
+def reduce_groups():
+    #combine groups which have a common member, because linearity is transitive
+    for i, group in list(enumerate(unit_groups)):
+        groups_with_common_key = [group_other for group_other in unit_groups[i+1:] if any(name in group_other for name in group if not name == '_id_')  ]
+        for group_other in groups_with_common_key:
+            common_key = [key for key in group if not key == '_id_' and key in group_other]
+            
+            merge_groups(group, group_other, group[common_key[0]] / group_other[common_key[0]] )
 #a**n b**-n s = 1
 #(a/b)**n = 1/s
 #(a/b) = (1/s)^(1/n) = 1/s^(1/n)
@@ -447,7 +445,8 @@ def merge_if_linear(eq):
     if len(variables) == 2:
         if eq[variables[0]] == -eq[variables[1]]:
             if eq[variables[0]] % 2 == 1:
-                merge_groups(get_group_by_id(variables[0]), get_group_by_id(variables[1]), eq['_']**(1/eq[variables[0]]) )
+                ratio =  eq['_']**(1/eq[variables[0]])
+                merge_groups(get_group_by_id(variables[0]), get_group_by_id(variables[1]),  ratio)
             else:
                 pass
 
@@ -509,29 +508,22 @@ def equation_handle(equations,src, target, left_expr, right_expr):
                         clean_equation(new_equation)
                         eq[eq.index(equ)] = new_equation
                 eq.remove(first_eq)
+
     if len(eq) > 0:
         for equ in eq:
-            if equ['$'] == -equ['$$'] and not equ['$'] == 0:
+            clean_equation(equ)
+            if equ['$'] == -equ['$$'] and not equ['$'] == 0 and len(get_variables(equ)) == 2:
                 conversion_factor = equ['_']**(1/equ['$$'])
-                if equ['$$'] >0:
-                    conversion_factor = 1/conversion_factor
                 
                 conversion_factor = round(conversion_factor*10e5) /10e5
                 print('{} = {} {}'.format(left_expr, conversion_factor, right_expr))
-                break
-            else:
-                print(equ)
-        else:
-            print('no solution')
-    else:
-        print('Failed to convert: no path found or units are different')
-            
-        
-    eq = equations[:]
+                return
+    print('Failed to convert: no path found or units are different')
+
 for equation in equations:
     merge_if_linear(equation)
 remove_redundant_equations()
-
+reduce_groups()
 print('Enter your conversion:')
 while True:
     left, right, left_expr, right_expr = parse(input('> '),'conversion').result
