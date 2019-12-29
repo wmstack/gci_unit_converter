@@ -11,9 +11,7 @@ cd gci_unit_converter
 #edit the conversion table
 
 #run!
-python3 converter.py
-Enter your conversion:
-ython3 converter.py 
+python3 converter.py 
 Enter your conversion:
 > horse to meters per second
 horse = 24.444444 meters per second
@@ -25,7 +23,6 @@ watts = 3600.0 joules per hour
 yards = 0.000914 kilometers
 > kelvin to rankine
 kelvin = 1.8 rankine
-
 ```
 
 
